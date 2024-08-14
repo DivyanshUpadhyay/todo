@@ -78,15 +78,14 @@ router.post('/update/:id', Auth, async (req, res) => {
 router.delete('/:id', Auth, async (req, res) => {
     try {
         const todo = await Todo.findById(req.params.id);
-
-        if (!todo || todo.user.toString() !== req.user._id.toString()) {
+        if (!todo) {
             return res.status(404).json({ message: 'Todo not found or unauthorized' });
         }
-
-        await todo.remove();
+        await todo.deleteOne();
         res.status(200).json({ message: 'Todo deleted successfully' });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
+        console.log(err);
     }
 });
 
